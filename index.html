@@ -7,10 +7,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body onload="fetchContacts()">
+<div class="container">
+    <h1>Contact Book</h1> </div>
 
+    <div class="controls">
     <div id="table">Contacts loading... </div>
     <button id="refresh" type="button">Refresh</button>
     <button id="addContact" type="button">Add Contact</button>
+</div>
     <script src="config.js"></script>
     <script>
         document.getElementById("addContact").addEventListener("click", addContact);
@@ -29,7 +33,7 @@
         let output = "<table>";
         for (let a in data) {
             output += `
-                <tr>
+                <tr onclick='editContact(${data[a].id})'>
                     <td><img src="${rootPath}controller/uploads/${data[a].avatar}" alt="Contact Photo" width="40"></td>
                     <td><h5>${data[a].firstname}</h5></td>
                     <td><h5>${data[a].lastname}</h5></td>
@@ -45,6 +49,14 @@
 
     function addContact() {
         window.open("add-contact.html", "_self");
+    }
+
+    function editContact(id) {
+        window.open("edit-contact.html?id=" + id, "_self");
+    }
+
+    function deleteContact(id) {
+        window.open("controller/delete-contact.php?id=" + id, "_self");
     }
 </script>
 </body>
