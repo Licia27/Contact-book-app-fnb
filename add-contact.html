@@ -23,42 +23,46 @@
     </form>
     <br/>
     <script src="config.js"></script>
-    <script>
+        <script>
+    document.getElementById("submitForm").addEventListener("click", submitForm);
+    document.getElementById("homeLink").addEventListener("click", homeLink);
 
-        document.getElementById("submitForm").addEventListener("click", submitForm);
-        document.getElementById("homeLink").addEventListener("click", homelink);
-        function submitForm(e) {
-            e.preventDefault();
+    function submitForm(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(document.querySelector("#editForm")); // Added # for ID selector
+        formData.append("apiKey", apiKey);
+        
+        fetch(rootPath + "controller/insert-contact/", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json, */*"
+            },
+            body: formData // Changed from 'form' to 'formData'
+        })
+        .then(function(response) {
+            return response.json(); // Changed to json() since you're checking data.status
+        })
+        .then(function(data) {
+            if (data.status == "1") {
+                alert("Contact added successfully!");
+                homeLink(); // Redirect to the main page
+            } else {
+                alert(data.message || "Error adding contact"); // Fixed syntax error
+                // Link to the main page
+                homeLink();
+            }
+        })
+        .catch(function(error) {
+            console.error('Error:', error);
+            alert("An error occurred while adding the contact");
+            homeLink();
+        });
+    }
 
-            const formData = new FormData(document.querySelector("editForm"));
-            formData.append("apiKey", apiKey);
-
-            fetch(rootPath + "controller/insert-contact/", {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json, */*"
-                },
-                body: form
-            })
-            .then(function(response) {
-                return response.text();
-            })
-            .then(function(data) {
-                if (data.status == "1") {
-                    alert("Contact added successfully!");
-                    homelink(); // Redirect to the main page
-                } else {
-                    alert(data));
-
-                    //link to the main page
-                    homelink();
-                }
-            })
-           
-
-           function homelink() {
-            window.location.href = "index.html", "_self"; // Redirect to the main page
-              }
-    </script>
+    function homeLink() {
+        window.location.href = "index.html"; // Removed invalid second parameter
+    }
+</script>
 </body>
 </html>
